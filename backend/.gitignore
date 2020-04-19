@@ -1,3 +1,6 @@
+# VSCode
+.vscode
+
 node_modules
 node_modules_linux
 nodejs_restclient.log
