@@ -3,8 +3,16 @@ const mongoose = require('mongoose');
 const express = require("express");
 const app = express();
 const fileUpload = require('express-fileupload');
+const volleyball = require('volleyball');
+
+
+var path = require('path');     //used for file path
+
+app.use(express.static(path.join(__dirname, 'public')));
 // default options
-app.use(fileUpload());
+app.use(fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+}));
 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -27,6 +35,7 @@ mongoose.connect(process.env.DATABASE, {
 });
 
 // Middleware
+app.use(volleyball)
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());

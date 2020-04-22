@@ -8,7 +8,20 @@ const postSchema = new mongoose.Schema(
             type:String,
             trim:true,
             required:true,
-            maxlength:32,
+            maxlength:100,
+        },
+        slug:{
+            type:String,
+            trim:true,
+            required:true,
+            maxlength:100,
+        },
+        photo:{
+            type:String,
+        },
+        rank:{
+            type:Number,
+            default:1,
         },
         description:{
             type:String,
@@ -16,27 +29,23 @@ const postSchema = new mongoose.Schema(
             required:true,
             maxlength:1500,
         },
-        price:{
+        view_count:{
             type:Number,
-            required:true,
-            maxlength:32,
-            trim:true,
+            default:0,
         },
         category:{
             type:ObjectId,
             ref:"Category"
         },
-        stock:{
-            type:Number,
+        status: {
+            type: Boolean,
+            default: true,
         },
-        sold:{
-            type:Number,
-            default:0,
+        main: {
+            type: Boolean,
+            default: true,
         },
-        photo:{
-            data:Buffer,
-            contentType:String,
-        }
+        
     },
     {timestamps:true}
 );

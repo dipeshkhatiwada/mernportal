@@ -22,27 +22,28 @@ const {
 
 // PARAMS
 router.param("userId", getUserById);
-router.param("postId", getPostById);
+// router.param("postId", getPostById);
 // ACTUAL ROUTES are here!!
 router.post("/post/create/:userId", isSignedIn, isAuthenticated, isAdmin, createPost);
-router.get("/post/:postId", getPost);
+
+// router.get("/post/:postId", getPost);
 //  MIDDLEWARE
-router.get("/post/photo/:postId", photo);
+// router.get("/post/photo/:postId", photo);
 
-router.put(
-    "/post/:postId/:userId",
-    isSignedIn, isAdmin, isAuthenticated,
-    updatePost
-);
+// router.put(
+//     "/post/:postId/:userId",
+//     isSignedIn, isAdmin, isAuthenticated,
+//     updatePost
+// );
 
-router.delete(
-    "/post/:postId/:userId",
-    isSignedIn, isAdmin, isAuthenticated,
-    removePost
-);
-// listing route
-router.get("/posts", getAllPosts);
+// router.delete(
+//     "/post/:postId/:userId",
+//     isSignedIn, isAdmin, isAuthenticated,
+//     removePost
+// );
+// // listing route
+// router.get("/posts", getAllPosts);
 
-router.get("/posts/categories", getAllUniqueCategories);
+// router.get("/posts/categories", getAllUniqueCategories);
 
 module.exports = router;
