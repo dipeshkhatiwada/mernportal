@@ -44,18 +44,18 @@ exports.createPost = (req, res)=>{
 };
 
 exports.getPost = (req, res) => {
-    req.post.photo = undefined;
+    // req.post.photo = undefined;
     return res.json(req.post);
 };
 
 // MIDDLEWARE
-exports.photo = (req, res, next) => {
-    if (req.post.photo.data) {
-        res.set("Content-Type", req.post.photo.contentType);
-        return res.send(req.post.photo.data);
-    }
-    next();
-};
+// exports.photo = (req, res, next) => {
+//     if (req.post.photo.data) {
+//         res.set("Content-Type", req.post.photo.contentType);
+//         return res.send(req.post.photo.data);
+//     }
+//     next();
+// };
 
 exports.updatePost = (req, res) => {
     let form = formidable.IncomingForm();

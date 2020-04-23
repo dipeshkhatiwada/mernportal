@@ -22,11 +22,11 @@ const {
 
 // PARAMS
 router.param("userId", getUserById);
-// router.param("postId", getPostById);
+router.param("postId", getPostById);
 // ACTUAL ROUTES are here!!
 router.post("/post/create/:userId", isSignedIn, isAuthenticated, isAdmin, createPost);
 
-// router.get("/post/:postId", getPost);
+router.get("/post/:postId", getPost);
 //  MIDDLEWARE
 // router.get("/post/photo/:postId", photo);
 
