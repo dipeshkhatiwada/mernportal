@@ -8,6 +8,7 @@ import PrivateRoute from './auth/helper/PrivateRoutes';
 // Component Import
 import Signin from './user/Signin';
 import Dashboard from './user/Dashboard';
+import AddCategory from './category/AddCategory';
 
 const Routes= ()=> {
     return (
@@ -17,6 +18,7 @@ const Routes= ()=> {
                 <Route path="/signin" exact component={Signin} />
                 
                 <PrivateRoute path="/admin/dashboard" exact component={Dashboard}  />
+                <PrivateRoute path="/admin/category/create" exact component={AddCategory}  />
             </Switch>
         </BrowserRouter>
     );
