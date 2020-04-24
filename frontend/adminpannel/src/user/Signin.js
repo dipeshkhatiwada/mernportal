@@ -1,8 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import {signin,authenticate,isAuthenticated} from "../auth/helper"
 
 const Signin = () => {
+  const [values, setValues] = useState({
+    email:"eee@rrr.com",
+    password:"4321",
+    error:"",
+    loading:false,
+    didRedirect:false,
+  });
+  const {email,password, error, loading, didRedirect}= values
+  // const {user} = isAuthenticated();
+  const handleChange = name => event =>{
+    setValues({...values,error:false, [name]:event.target.value});
+  }
+  const onSubmit = event=>{
+    event.preventDefault();
+    setValues({...values,error:false,loading:true});
+    signin({email, password})
+    .then(data=>{
+      if(data.error){
+        setValues({...values, error: data.error, loading:false});
+      }else{
+        authenticate(data, ()=>{
+          setValues({
+            ...values,
+            didRedirect:true,
+          });
+        });
+      }
+    })
+    .catch(err=>console.log(err))
+  };
+  const loadingDiv = ()=>{
+    return (
+      loading && (
+        <div className="loader"></div>
+      )
+    )
+  }
+  const performRedirect=()=>{
+    // TODO: redirection
+    if(didRedirect){
+      if(isAuthenticated()){
+        return <Redirect to="/admin/dashboard" />;
+      }
+    }
+  }
+  const errorMessage = ()=>(
+    <div className="alert alert-danger" style={{display:error ? "": "none"}}>
+      {error}
+    </div>
+  );
   return (
     <section className="section">
+      {loadingDiv()}
+      {performRedirect()}
       <div className="container mt-5">
         <div className="row">
           <div className="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 ">
@@ -11,10 +65,11 @@ const Signin = () => {
                 <h4>News Portal - Login to Access Admin Panel</h4>
               </div>
               <div className="card-body">
+                {errorMessage()}
                 <form method="POST" action="#" className="needs-validation" noValidate>
                   <div className="form-group">
                     <label htmlFor="email">Email</label>
-                    <input id="email" type="email" className="form-control" name="email" tabIndex="1" required autoFocus/>
+                    <input onChange={handleChange("email")} id="email" type="email" className="form-control" value={email} tabIndex="1" required autoFocus/>
                     <div className="invalid-feedback">
                       Please fill in your email
                     </div>
@@ -28,19 +83,20 @@ const Signin = () => {
                         </a>
                       </div>
                     </div>
-                    <input id="password" type="password" className="form-control" name="password" tabIndex="2" required/>
+                    <input onChange={handleChange("password")} id="password" type="password" className="form-control" value={password}  tabIndex="2" required/>
                     <div className="invalid-feedback">
                       please fill in your password
                     </div>
                   </div>
                   <div className="form-group">
                     <div className="custom-control custom-checkbox">
+                      {JSON.stringify(values)}
                       {/* <input type="checkbox" name="remember" className="custom-control-input" tabIndex="3" id="remember-me"/> */}
                       {/* <label className="custom-control-label" for="remember-me">Remember Me</label> */}
                     </div>
                   </div>
                   <div className="form-group">
-                    <button type="submit" className="btn btn-primary btn-lg btn-block" tabIndex="4">
+                    <button onClick={onSubmit} type="submit" className="btn btn-primary btn-lg btn-block" tabIndex="4">
                       Login
                     </button>
                   </div>
