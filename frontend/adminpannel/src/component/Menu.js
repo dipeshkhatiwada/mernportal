@@ -48,8 +48,8 @@ const Menu = ({
                   <li className={activeList(history,list.url.concat("/create"))}>
                     <Link   className="nav-link" to={list.url.concat("/create")}> Create </Link>
                   </li>
-                  <li className={activeList(history,list.url.concat("/create"))}>
-                    <Link   className="nav-link" to={list.url.concat("/list")}> List </Link>
+                  <li className={activeList(history,list.url.concat("/index"))}>
+                    <Link   className="nav-link" to={list.url.concat("/index")}> List </Link>
                   </li>
                 </ul>
               </li>

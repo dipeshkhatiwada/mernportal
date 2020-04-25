@@ -4,7 +4,6 @@ import Base from '../component/Base';
 import { createCategory } from './helper/adminapicall';
 import Loader from '../component/Loader';
 import Messages from '../component/Messages';
-import Toastr from '../component/Toastr';
 const AddCategory = () => {
   const {user,token} = isAuthenticated();
   const [values, setValues] = useState({
