@@ -10,7 +10,7 @@ const Navbar = ({
   return (
     <>
     <div className="navbar-bg"></div>
-    <nav className="navbar navbar-expand-lg main-navbar sticky">
+    <nav className="navbar navbar-expand-lg main-navbar">
       <div className="form-inline mr-auto">
         <ul className="navbar-nav mr-3">
           <li>

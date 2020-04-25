@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import {signin,authenticate,isAuthenticated} from "../auth/helper"
+import Loader from '../component/Loader';
 
 const Signin = () => {
   const [values, setValues] = useState({
@@ -33,13 +34,7 @@ const Signin = () => {
     })
     .catch(err=>console.log(err))
   };
-  const loadingDiv = ()=>{
-    return (
-      loading && (
-        <div className="loader"></div>
-      )
-    )
-  }
+  
   const performRedirect=()=>{
     // TODO: redirection
     if(didRedirect){
@@ -53,9 +48,12 @@ const Signin = () => {
       {error}
     </div>
   );
+  if(isAuthenticated()){
+    return <Redirect to="/admin/dashboard" />;
+  }
   return (
     <section className="section">
-      {loadingDiv()}
+      {Loader(loading)}
       {performRedirect()}
       <div className="container mt-5">
         <div className="row">
