@@ -40,7 +40,7 @@ const Menu = ({
         {listDisplay.map((list,index)=>{
             return(
               <li key={index} className={activeTab(history,list.url)}>
-                <a href="/" className="menu-toggle nav-link has-dropdown">
+                <a href={list.url.concat("/index")} className="menu-toggle nav-link has-dropdown">
                   <i className={list.icon}></i>
                   <span>{list.displayname}</span>
                 </a>

@@ -17,7 +17,7 @@ const AddCategory = () => {
       success:"",
       getaRedirect:false,
   });
-  const { title, slug, rank, status, menu, loading, error, success, getaRedirect, formData} = values;
+  const { title, slug, rank, status, menu, loading, error, success, getaRedirect} = values;
   const handleChange = name => event => {
     setValues({...values,error:false, [name]:event.target.value});
   };

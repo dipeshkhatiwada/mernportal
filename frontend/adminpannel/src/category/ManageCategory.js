@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Base from '../component/Base';
 import { isAuthenticated } from '../auth/helper';
-import { getCategories } from './helper/adminapicall';
+import { getCategories, deleteCategory } from './helper/adminapicall';
+import swal from 'sweetalert';
+import { Link } from 'react-router-dom';
 
 const ManageCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -15,10 +17,38 @@ const ManageCategory = () => {
       }
     });
   };
-  console.log(categories);
   useEffect(() => {
     preload();
   }, []);
+
+  const deleteThisCategory = categoryId => {
+    swal({
+      title: 'Are you sure?',
+      text: 'Once deleted, you will not be able to recover this Category!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        deleteCategory(categoryId, user._id, token)
+        .then(data => {
+          if (data.error) {
+            console.log(data.error);
+          }else{
+            swal('Poof! Your category has been deleted successfully!', {
+              icon: 'success',
+            });
+            preload();
+          }
+        })
+      } else {
+        swal('Your Category is safe!');
+      }
+    });
+  };
+
+
   return (
     <Base>
         <div className="row">
@@ -45,7 +75,7 @@ const ManageCategory = () => {
                         {categories.map((category, index) => {
                             return(
                                 <tr key={index}>
-                                <td>{index}</td>
+                                <td>{index+1}</td>
                                 <td>{category.title}</td>
                                 <td>{category.slug}</td>
                                 <td>{category.rank}</td>
@@ -53,7 +83,12 @@ const ManageCategory = () => {
                                 <td>
                                   <div className="badge badge-success badge-shadow">Completed</div>
                                 </td>
-                                <td><a href="/" className="btn btn-primary">Detail</a></td>
+                                <td>
+                                  <button onClick={() => { deleteThisCategory(category._id); }} className="btn btn-danger" title="Delete"><i className="fa fa-trash"></i></button> &nbsp; 
+                                  <Link className="btn btn-info" to={`/admin/category/update/${category._id}`} title="Edit" >
+                                    <i className="fa fa-edit"></i>
+                                  </Link>
+                                </td>
                               </tr>
                             );
                         })}
