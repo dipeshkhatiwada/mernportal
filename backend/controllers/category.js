@@ -2,16 +2,17 @@ const Category = require("../models/category")
 
 exports.getCategorybyId = (req, res, next, id) => {
 
-    Category.findById(id).exec((err, Category) => {
+    Category.findById(id).exec((err, category) => {
         if (err) {
             return res.status(400).json({
                 error: "Category not found"
             });
         }
-        req.category = Category
+        req.category = category;
+        next();
+
     })
 
-    next();
 }
 
 
@@ -44,7 +45,8 @@ exports.getAllCategory = (req, res) => {
 
 exports.updateCategory = (req, res) => {
     const category = req.category;
-    category.name = req.body.name;
+    category.title = req.body.title;
+    console.log("CAT",category);
 
     category.save((err, updatedCategory) => {
         if (err) {

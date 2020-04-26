@@ -32,7 +32,7 @@ export const getCategories = ()=>{
 
 // get a CATEGORY
 export const getCategory = categoryId=>{
-    return fetch(`${API}/catgeory/${categoryId}`,{
+    return fetch(`${API}/category/${categoryId}`,{
         method:"GET"
     })
     .then(response=>{
@@ -64,9 +64,10 @@ export const updateCategory =(categoryId, userId, token, category)=>{
             Accept: "application/json",
             Authorization:`Bearer ${token}`
         },
-        body: JSON.stringify(category)
+        body: JSON.stringify(category['values'])
     })
     .then(response=>{
+        console.log("RES",response)
         return response.json()
     })
     .catch(err=>console.log(err))

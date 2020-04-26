@@ -85,7 +85,7 @@ const ManageCategory = () => {
                                 </td>
                                 <td>
                                   <button onClick={() => { deleteThisCategory(category._id); }} className="btn btn-danger" title="Delete"><i className="fa fa-trash"></i></button> &nbsp; 
-                                  <Link className="btn btn-info" to={`/admin/category/update/${category._id}`} title="Edit" >
+                                  <Link className="btn btn-info" to={`/admin/category/update-${category._id}`} title="Edit" >
                                     <i className="fa fa-edit"></i>
                                   </Link>
                                 </td>
