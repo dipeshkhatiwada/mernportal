@@ -10,8 +10,8 @@ const listDisplay = [
       icon:"fa fa-list"
     },
     {
-      displayname:"product",
-      url:"/admin/product",
+      displayname:"post",
+      url:"/admin/post",
       icon:"fa fa-user"
     },
   ];

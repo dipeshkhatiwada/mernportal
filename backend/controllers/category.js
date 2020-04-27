@@ -1,5 +1,5 @@
 const Category = require("../models/category")
-
+const _ = require("lodash");
 exports.getCategorybyId = (req, res, next, id) => {
 
     Category.findById(id).exec((err, category) => {
@@ -44,10 +44,10 @@ exports.getAllCategory = (req, res) => {
 };
 
 exports.updateCategory = (req, res) => {
-    const category = req.category;
-    category.title = req.body.title;
-    console.log("CAT",category);
-
+    // updation code
+    let category = req.category;
+    category = _.extend(category, req.body)
+    console.log("CAT",req)
     category.save((err, updatedCategory) => {
         if (err) {
             return res.status(400).json({
