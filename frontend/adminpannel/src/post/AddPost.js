@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import CKEditor from 'ckeditor4-react';
 import { isAuthenticated } from '../auth/helper';
 import Base from '../component/Base';
-import { createCategory, getCategories } from './helper/adminapicall';
+import { createCategory, getCategories } from '../category/helper/adminapicall';
 import Loader from '../component/Loader';
 import Messages from '../component/Messages';
 const AddPost = () => {
@@ -28,6 +29,9 @@ const AddPost = () => {
   const handleChange = name => event => {
     setValues({...values,error:false, [name]:event.target.value});
   };
+  const onEditorChange = ( evt ) => {
+    setValues( {...values, description: evt.editor.getData() } );
+  }
   const preload= () => {
     getCategories().then(data =>{
         // console.log(data);
@@ -73,7 +77,8 @@ const AddPost = () => {
     })
   }
   const createPostForm = ()=>(
-    <form  method="POST" className="needs-validation" noValidate>
+    <form  method="POST" className="needs-validation" noValidate enctype="multipart/form-data">
+
       <div className="form-group">
         <label className="col-form-label col-12 ">Title</label>
         <input type="text" onKeyUp={slugify} onChange={handleChange("title")} value={title} className="form-control my-3" autoFocus required placeholder="Enter title" />
@@ -89,10 +94,26 @@ const AddPost = () => {
         </div>
       </div>
       <div className="form-group">
+        <label className="col-form-label col-12 ">photo</label>
+        <input type="file" onChange={handleChange("photo")} value={photo} className="form-control my-3" required placeholder="Enter photo" />
+        <div className="invalid-feedback">
+          Please enter category photo
+        </div>
+      </div>
+      <div className="form-group">
         <label className="col-form-label col-12 ">Rank</label>
         <input type="number" onChange={handleChange("rank")} value={rank} className="form-control my-3" required placeholder="Enter rank" />
         <div className="invalid-feedback">
           Please enter rank
+        </div>
+      </div>
+      <div className="form-group">
+        <label className="col-form-label col-12 ">description</label>
+        <CKEditor data={description} onChange={onEditorChange} />
+          {JSON.stringify(values)}
+        {/* <textarea onChange={handleChange("description")} value={description} className="form-control my-3" required placeholder="Enter description" ></textarea> */}
+        <div className="invalid-feedback">
+          Please enter description
         </div>
       </div>
       

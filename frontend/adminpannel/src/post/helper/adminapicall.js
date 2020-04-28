@@ -2,16 +2,16 @@ const API = "http://127.0.0.1:8000/api";
 
 
 
-// CATEGORY call
-export const createCategory = (userId,token,category)=>{
-    return fetch(`${API}/category/create/${userId}`,{
+// post call
+export const createPost = (userId,token,post)=>{
+    return fetch(`${API}/post/create/${userId}`,{
         method:"POST",
         headers:{
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization:`Bearer ${token}`
         },
-        body: JSON.stringify(category)
+        body: JSON.stringify(post)
     })
     .then(response=>{
         return response.json()
@@ -19,9 +19,9 @@ export const createCategory = (userId,token,category)=>{
     .catch(err => console.log(err))
 };
 
-// GET ALL CATEGORIES
-export const getCategories = ()=>{
-    return fetch(`${API}/categories`,{
+// GET ALL Posts
+export const getPosts = ()=>{
+    return fetch(`${API}/posts`,{
         method:"GET"
     })
     .then(response=>{
@@ -30,9 +30,9 @@ export const getCategories = ()=>{
     .catch(err=>console.log(err))
 };
 
-// get a CATEGORY
-export const getCategory = categoryId=>{
-    return fetch(`${API}/category/${categoryId}`,{
+// get a post
+export const getPost = postId=>{
+    return fetch(`${API}/post/${postId}`,{
         method:"GET"
     })
     .then(response=>{
@@ -41,9 +41,9 @@ export const getCategory = categoryId=>{
     .catch(err=>console.log(err))
 };
 
-// delete a CATEGORY
-export const deleteCategory =(categoryId,userId, token)=>{
-    return fetch(`${API}/category/${categoryId}/${userId}`,{
+// delete a post
+export const deletePost =(postId,userId, token)=>{
+    return fetch(`${API}/post/${postId}/${userId}`,{
         method:"DELETE",
         headers:{
             Accept: "application/json",
@@ -56,15 +56,15 @@ export const deleteCategory =(categoryId,userId, token)=>{
     .catch(err=>console.log(err))
 };
 
-// update a CATEGORY
-export const updateCategory =(categoryId, userId, token, category)=>{
-    return fetch(`${API}/category/${categoryId}/${userId}`,{
+// update a post
+export const updatePost =(postId, userId, token, post)=>{
+    return fetch(`${API}/post/${postId}/${userId}`,{
         method:"PUT",
         headers:{
             Accept: "application/json",
             Authorization:`Bearer ${token}`
         },
-        body: JSON.stringify(category)
+        body: JSON.stringify(post)
     })
     .then(response=>{
         console.log("RES",response)
