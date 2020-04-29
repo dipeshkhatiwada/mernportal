@@ -8,7 +8,7 @@ import Messages from '../component/Messages';
 const AddPost = () => {
   const {user,token} = isAuthenticated();
   const [values, setValues] = useState({
-      title: "",
+      name: "",
       slug: "",
       photo:"",
       rank: 1,
@@ -23,10 +23,11 @@ const AddPost = () => {
       getaRedirect:false,
   });
   const {
-     title, slug, photo, rank, description, status, main,
+     name, slug, photo, rank, description, status, main,
      categories, category, loading, error, success, getaRedirect
     } = values;
   const handleChange = name => event => {
+    // console.log(event);
     setValues({...values,error:false, [name]:event.target.value});
   };
   const onEditorChange = ( evt ) => {
@@ -39,7 +40,6 @@ const AddPost = () => {
             setValues({...values, error:data.error});
         }else{
             setValues({...values, categories:data, formData: new FormData() });
-            console.log("CAT", categories);
         }
     })
   }
@@ -48,7 +48,7 @@ const AddPost = () => {
   }, []);
 
   const slugify = ()=>{
-    var slug = title;
+    var slug = name;
     slug = slug.toLowerCase();
     var regExp = /\s+/g;
     slug = slug.replace(regExp,'-');
@@ -65,25 +65,39 @@ const AddPost = () => {
       }else{
           setValues({
               ...values,
-              title: "",
+              name: "",
               slug: "",
               rank: 1,
               status: "true",
               main: "false",
               loading:false,
-              success:"Category created successfully"
+              success:"Post created successfully"
           })
       }
     })
   }
   const createPostForm = ()=>(
-    <form  method="POST" className="needs-validation" noValidate enctype="multipart/form-data">
-
+    <form  method="POST" className="needs-validation" noValidate encType="multipart/form-data">
+       <div className="form-group">
+        <label className="col-form-label col-12 ">Category</label>
+        <select
+        onChange={handleChange("category")}
+        className="form-control select2"
+        placeholder="Category"
+        >
+        <option value="hello">Select Category</option>
+        {categories && 
+        categories.map((cat, index) => (
+            <option key={index} value={cat._id}>{cat.title}</option>
+        ))
+        }
+        </select>
+    </div>
       <div className="form-group">
-        <label className="col-form-label col-12 ">Title</label>
-        <input type="text" onKeyUp={slugify} onChange={handleChange("title")} value={title} className="form-control my-3" autoFocus required placeholder="Enter title" />
+        <label className="col-form-label col-12 ">Name</label>
+        <input type="text" onKeyUp={slugify} onChange={handleChange("name")} value={name} className="form-control my-3" autoFocus required placeholder="Enter name" />
         <div className="invalid-feedback">
-          Please enter category title
+          Please enter category name
         </div>
       </div>
       <div className="form-group">

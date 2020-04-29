@@ -27,6 +27,8 @@ router.param("postId", getPostById);
 router.post("/post/create/:userId", isSignedIn, isAuthenticated, isAdmin, createPost);
 
 router.get("/post/:postId", getPost);
+router.get("/posts", getAllPosts)
+
 //  MIDDLEWARE
 // router.get("/post/photo/:postId", photo);
 

@@ -47,6 +47,18 @@ exports.getPost = (req, res) => {
     // req.post.photo = undefined;
     return res.json(req.post);
 };
+exports.getAllPost = (req, res) => {
+    Post.find()
+    .populate("category")
+    .exec((err, posts) => {
+        if (err) {
+            return res.status(400).json({
+                error: "Error DB, No Category",
+            });
+        }
+        return res.json(posts);
+    });
+};
 
 // MIDDLEWARE
 // exports.photo = (req, res, next) => {
