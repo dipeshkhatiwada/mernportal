@@ -3,6 +3,7 @@ import CKEditor from 'ckeditor4-react';
 import { isAuthenticated } from '../auth/helper';
 import Base from '../component/Base';
 import { createCategory, getCategories } from '../category/helper/adminapicall';
+import { createPost } from './helper/adminapicall';
 import Loader from '../component/Loader';
 import Messages from '../component/Messages';
 const AddPost = () => {
@@ -21,17 +22,25 @@ const AddPost = () => {
       error:"",
       success:"",
       getaRedirect:false,
+      formData:""
   });
   const {
      name, slug, photo, rank, description, status, main,
-     categories, category, loading, error, success, getaRedirect
+     categories, category, loading, error, success, getaRedirect,formData
     } = values;
   const handleChange = name => event => {
-    // console.log(event);
+    // formData.set(name,event.target.value);
+    // console.log("ds",event.target.value);
+    // console.log(name);
+    // console.log(event)
     setValues({...values,error:false, [name]:event.target.value});
   };
   const onEditorChange = ( evt ) => {
     setValues( {...values, description: evt.editor.getData() } );
+  }
+  const handlecategory =(e) =>{
+    console.log(e.target.value);
+    setValues({...values,error:false, [e.target.name]:e.target.value});
   }
   const preload= () => {
     getCategories().then(data =>{
@@ -58,7 +67,7 @@ const AddPost = () => {
     event.preventDefault();
     setValues({...values, error:"", loading:true })
     // backend request call
-    createCategory(user._id,token,{values})
+    createPost(user._id,token,{values})
     .then(data=>{
       if(data.error){
           setValues({...values, error: data.error})
@@ -80,12 +89,13 @@ const AddPost = () => {
     <form  method="POST" className="needs-validation" noValidate encType="multipart/form-data">
        <div className="form-group">
         <label className="col-form-label col-12 ">Category</label>
+        {JSON.stringify(values)}
         <select
         onChange={handleChange("category")}
-        className="form-control select2"
-        placeholder="Category"
+        className="form-control"
+        name="category"
         >
-        <option value="hello">Select Category</option>
+        <option >Select Category</option>
         {categories && 
         categories.map((cat, index) => (
             <option key={index} value={cat._id}>{cat.title}</option>
@@ -124,7 +134,6 @@ const AddPost = () => {
       <div className="form-group">
         <label className="col-form-label col-12 ">description</label>
         <CKEditor data={description} onChange={onEditorChange} />
-          {JSON.stringify(values)}
         {/* <textarea onChange={handleChange("description")} value={description} className="form-control my-3" required placeholder="Enter description" ></textarea> */}
         <div className="invalid-feedback">
           Please enter description

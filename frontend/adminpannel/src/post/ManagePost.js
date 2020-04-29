@@ -76,9 +76,12 @@ const ManagePost = () => {
                                 <tr key={index}>
                                 <td>{index+1}</td>
                                 <td>{post.name}</td>
-                                <td>{post.photo}
-                                  <img src="{post.photo}" alt="postphoto" />
-                                  {/* <span>No Photo</span> */}
+                                <td>
+                                  {post.photo?(
+                                  <img src={`http://localhost:8000${post.photo}`} alt="postphoto" height="100" width="200px" />
+                                  ):(
+                                   <span>No Photo</span> 
+                                  )}
                                 </td>
                                 <td>{post.rank}</td>
                                 <td>

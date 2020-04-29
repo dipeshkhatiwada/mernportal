@@ -47,7 +47,7 @@ exports.getPost = (req, res) => {
     // req.post.photo = undefined;
     return res.json(req.post);
 };
-exports.getAllPost = (req, res) => {
+exports.getAllPosts = (req, res) => {
     Post.find()
     .populate("category")
     .exec((err, posts) => {
@@ -57,6 +57,7 @@ exports.getAllPost = (req, res) => {
             });
         }
         return res.json(posts);
+        console.log("POST",posts);
     });
 };
 
@@ -124,26 +125,26 @@ exports.removePost = (req, res) => {
 };
 
 // LISTING ROUTES
-exports.getAllPosts = (req, res) => {
-    let limit = req.query.limit ? parseInt(req.query.limit) : 8;
-    let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
+// exports.getAllPosts = (req, res) => {
+//     let limit = req.query.limit ? parseInt(req.query.limit) : 8;
+//     let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
 
-    Post.find()
-        .select("-photo")
-        .populate("catregory")
-        .sort([
-            [sortBy, "asc"]
-        ])
-        .limit(limit)
-        .exec((err, posts) => {
-            if (err) {
-                return res.status(400).json({
-                    error: "Post not fount in DB",
-                });
-            }
-            res.json(posts)
-        })
-}
+//     Post.find()
+//         .select("-photo")
+//         .populate("catregory")
+//         .sort([
+//             [sortBy, "asc"]
+//         ])
+//         .limit(limit)
+//         .exec((err, posts) => {
+//             if (err) {
+//                 return res.status(400).json({
+//                     error: "Post not fount in DB",
+//                 });
+//             }
+//             res.json(posts)
+//         })
+// }
 
 exports.getAllUniqueCategories = (req, res) => {
     Post.distinct("category", {}, (err, category) => {

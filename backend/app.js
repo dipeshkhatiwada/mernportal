@@ -8,7 +8,10 @@ const volleyball = require('volleyball');
 
 var path = require('path');     //used for file path
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use("/uploads*",express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static('uploads'));
+
+// app.use(express.static('uploads'))
 // default options
 app.use(fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 },

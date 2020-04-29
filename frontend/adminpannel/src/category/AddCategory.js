@@ -51,7 +51,7 @@ const AddCategory = () => {
     })
   }
   const createCategoryForm = ()=>(
-    <form  method="POST" className="needs-validation" noValidate>
+    <form  method="POST" className="needs-validation">
       <div className="form-group">
         <label className="col-form-label col-12 ">Title</label>
         <input type="text" onKeyUp={slugify} onChange={handleChange("title")} value={title} className="form-control my-3" autoFocus required placeholder="Enter title" />
