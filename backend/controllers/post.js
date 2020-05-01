@@ -19,20 +19,22 @@ exports.getPostById = (req, res, next, id) => {
 };
 
 exports.createPost = (req, res)=>{
-    if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).send('Photo is required.');
-    }
-    // The name of the input field (i.e. "photo") is used to retrieve the uploaded file
-    let photo = req.files.photo;
-    // Use the mv() method to place the file somewhere on your server
-    photo.mv('./uploads/'+photo.name, function(err) {
-        if (err){
-            return res.status(500).send(err);
-        }
-    });
+    // console.log(req.body);
+
+    // if (!req.files || Object.keys(req.files).length === 0) {
+    //     return res.status(400).send('Photo is required.');
+    // }
+    // // The name of the input field (i.e. "photo") is used to retrieve the uploaded file
+    // let photo = req.files.photo;
+    // // Use the mv() method to place the file somewhere on your server
+    // photo.mv('./uploads/'+photo.name, function(err) {
+    //     if (err){
+    //         return res.status(500).send(err);
+    //     }
+    // });
     Post.create({
         ...req.body,
-        photo: `/uploads/${photo.name}`//this code is what I get in the database photo
+        // photo: `/uploads/${photo.name}`//this code is what I get in the database photo
     }, (err, post) => {
         if (err) {
             return res.status(400).json(err);

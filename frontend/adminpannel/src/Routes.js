@@ -13,6 +13,7 @@ import ManageCategory from './category/ManageCategory';
 import UpdateCategory from './category/UpdateCategory';
 import AddPost from './post/AddPost';
 import ManagePost from './post/ManagePost';
+import ListPost from './post/ListPost';
 const Routes= ()=> {
     return (
         <BrowserRouter>
@@ -28,6 +29,7 @@ const Routes= ()=> {
 
                 <PrivateRoute path="/admin/post/create" exact component={AddPost}  />
                 <PrivateRoute path="/admin/post/index" exact component={ManagePost}  />
+                <PrivateRoute path="/admin/post/detail-:postId" exact component={ListPost}  />
 
             </Switch>
         </BrowserRouter>

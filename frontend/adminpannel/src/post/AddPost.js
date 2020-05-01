@@ -29,22 +29,19 @@ const AddPost = () => {
      categories, category, loading, error, success, getaRedirect,formData
     } = values;
   const handleChange = name => event => {
-    // formData.set(name,event.target.value);
-    // console.log("ds",event.target.value);
-    // console.log(name);
-    // console.log(event)
-    setValues({...values,error:false, [name]:event.target.value});
+    const value = name === "photo" ? event.target.files[0] :event.target.value
+        formData.set(name,value);
+        setValues({...values,error:false, [name]:value});
   };
   const onEditorChange = ( evt ) => {
     setValues( {...values, description: evt.editor.getData() } );
   }
-  const handlecategory =(e) =>{
-    console.log(e.target.value);
-    setValues({...values,error:false, [e.target.name]:e.target.value});
-  }
+  // const handlefile =(e) =>{
+  //   // console.log(e.target.files[0]);
+  //   setValues({...values, photo:e.target.files[0]});
+  // }
   const preload= () => {
     getCategories().then(data =>{
-        // console.log(data);
         if(data.error){
             setValues({...values, error:data.error});
         }else{
@@ -65,10 +62,11 @@ const AddPost = () => {
   }
   const onSubmit = (event)=>{
     event.preventDefault();
-    setValues({...values, error:"", loading:true })
+    setValues({...values, error:"", categories:[], loading:true })
     // backend request call
-    createPost(user._id,token,{values})
+    createPost(user._id,token,values)
     .then(data=>{
+      console.log(data);
       if(data.error){
           setValues({...values, error: data.error})
       }else{
@@ -119,7 +117,7 @@ const AddPost = () => {
       </div>
       <div className="form-group">
         <label className="col-form-label col-12 ">photo</label>
-        <input type="file" onChange={handleChange("photo")} value={photo} className="form-control my-3" required placeholder="Enter photo" />
+        <input type="file" name="photo" accept="image" onChange={handleChange("photo")} className="form-control my-3" required placeholder="Enter photo" />
         <div className="invalid-feedback">
           Please enter category photo
         </div>

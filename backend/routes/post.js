@@ -29,23 +29,17 @@ router.post("/post/create/:userId", isSignedIn, isAuthenticated, isAdmin, create
 router.get("/post/:postId", getPost);
 router.get("/posts", getAllPosts)
 
-//  MIDDLEWARE
-// router.get("/post/photo/:postId", photo);
-
 // router.put(
 //     "/post/:postId/:userId",
 //     isSignedIn, isAdmin, isAuthenticated,
 //     updatePost
 // );
 
-// router.delete(
-//     "/post/:postId/:userId",
-//     isSignedIn, isAdmin, isAuthenticated,
-//     removePost
-// );
-// // listing route
-// router.get("/posts", getAllPosts);
-
+router.delete(
+    "/post/:postId/:userId",
+    isSignedIn, isAdmin, isAuthenticated,
+    removePost
+);
 // router.get("/posts/categories", getAllUniqueCategories);
 
 module.exports = router;

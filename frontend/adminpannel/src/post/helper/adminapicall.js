@@ -1,7 +1,5 @@
 const API = "http://127.0.0.1:8000/api";
 
-
-
 // post call
 export const createPost = (userId,token,post)=>{
     return fetch(`${API}/post/create/${userId}`,{

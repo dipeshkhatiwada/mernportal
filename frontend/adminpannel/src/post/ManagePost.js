@@ -92,6 +92,9 @@ const ManagePost = () => {
                                   )}
                                 </td>
                                 <td>
+                                <Link className="btn btn-info" to={`/admin/post/detail-${post._id}`} title="View Details" >
+                                    <i className="fa fa-eye"></i>
+                                  </Link>
                                   <button onClick={() => { deleteThispost(post._id); }} className="btn btn-danger" title="Delete"><i className="fa fa-trash"></i></button> &nbsp; 
                                   <Link className="btn btn-info" to={`/admin/post/update-${post._id}`} title="Edit" >
                                     <i className="fa fa-edit"></i>
