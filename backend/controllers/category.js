@@ -47,7 +47,6 @@ exports.updateCategory = (req, res) => {
     // updation code
     let category = req.category;
     category = _.extend(category, req.body)
-    console.log("CAT",req)
     category.save((err, updatedCategory) => {
         if (err) {
             return res.status(400).json({

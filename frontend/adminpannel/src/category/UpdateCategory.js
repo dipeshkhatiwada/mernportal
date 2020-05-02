@@ -46,7 +46,7 @@ const UpdateCategory = ({match}) => {
     event.preventDefault();
     setValues({...values, error:"", loading:true })
     // backend request call
-    updateCategory(match.params.categoryId, user._id, token, {values})
+    updateCategory(match.params.categoryId, user._id, token, values)
     .then(data=>{
       if(data.error){
           setValues({...values, error: data.error})
@@ -54,7 +54,7 @@ const UpdateCategory = ({match}) => {
           setValues({
               ...values,
               loading:false,
-              success:"Category upaated successfully"
+              success:"Category updated successfully"
           })
       }
     })

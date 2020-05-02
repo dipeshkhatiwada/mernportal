@@ -67,6 +67,7 @@ const ManagePost = () => {
                             <th>Photo</th>
                             <th>Rank</th>
                             <th>Status</th>
+                            <th>Main</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -78,7 +79,7 @@ const ManagePost = () => {
                                 <td>{post.name}</td>
                                 <td>
                                   {post.photo?(
-                                  <img src={`http://localhost:8000${post.photo}`} alt="postphoto" height="100" width="200px" />
+                                  <img src={`http://localhost:8000${post.photo}`} alt="postphoto" className="list-photo" height="100" width="200px" />
                                   ):(
                                    <span>No Photo</span> 
                                   )}
@@ -92,9 +93,16 @@ const ManagePost = () => {
                                   )}
                                 </td>
                                 <td>
+                                {post.main?(
+                                    <div className="badge badge-success badge-shadow">Active</div>
+                                  ) :(
+                                    <div className="badge badge-warning badge-shadow">Deactive</div>
+                                  )}
+                                </td>
+                                <td>
                                 <Link className="btn btn-info" to={`/admin/post/detail-${post._id}`} title="View Details" >
                                     <i className="fa fa-eye"></i>
-                                  </Link>
+                                  </Link> &nbsp; 
                                   <button onClick={() => { deleteThispost(post._id); }} className="btn btn-danger" title="Delete"><i className="fa fa-trash"></i></button> &nbsp; 
                                   <Link className="btn btn-info" to={`/admin/post/update-${post._id}`} title="Edit" >
                                     <i className="fa fa-edit"></i>

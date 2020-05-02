@@ -94,7 +94,7 @@ const ListPost = ({match}) => {
                             <th className="text-center">Photo</th>
                             <td>
                               {post.photo?(
-                              <img src={`http://localhost:8000${post.photo}`} alt="postphoto" height="100" width="200px" />
+                              <img src={`http://localhost:8000${post.photo}`} alt="postphoto" className="list-photo"  height="100" width="200px" />
                               ):(
                                 <h3 className="text text-warning">No Photo</h3> 
                               )}
