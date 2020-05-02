@@ -75,6 +75,7 @@ const AddPost = () => {
               name: "",
               slug: "",
               rank: 1,
+              description:"",
               status: "true",
               main: "false",
               loading:false,

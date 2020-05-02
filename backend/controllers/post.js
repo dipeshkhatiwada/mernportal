@@ -46,7 +46,7 @@ exports.createPost = (req, res)=>{
 };
 
 exports.getPost = (req, res) => {
-    // req.post.photo = undefined;
+    console.log(req.post);
     return res.json(req.post);
 };
 exports.getAllPosts = (req, res) => {

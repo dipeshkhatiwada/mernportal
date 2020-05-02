@@ -17,7 +17,6 @@ const ListPost = ({match}) => {
       }
     });
   };
-  console.log(post)
   useEffect(() => {
     preload(match.params.postId);
   }, []);
@@ -45,16 +44,11 @@ const ListPost = ({match}) => {
         })
       } else {
         console.log("bfjkad");
-        // swal('Your post is safe!');
-        renderRedirect()
+        swal('Your post is safe!');
+        return (<Redirect to='/'/>)
       }
     });
   };
-
-  const renderRedirect = () => {
-    console.log("sda")
-      return <Redirect to='/target' />
-  }
   return (
     <Base>
         <div className="row">
@@ -78,7 +72,7 @@ const ListPost = ({match}) => {
                           <tr>
                             <th>1.</th>
                             <th className="text-center">Category</th>
-                            <td>{post.category}</td>
+                            <td>{post.category && post.category.title}</td>
                           </tr>
                           <tr>
                             <th>2.</th>
@@ -102,14 +96,16 @@ const ListPost = ({match}) => {
                               {post.photo?(
                               <img src={`http://localhost:8000${post.photo}`} alt="postphoto" height="100" width="200px" />
                               ):(
-                                <span>No Photo</span> 
+                                <h3 className="text text-warning">No Photo</h3> 
                               )}
                             </td>
                           </tr>
                           <tr>
                             <th>6.</th>
                             <th className="text-center">Description</th>
-                            <td>{post.description}</td>
+                            <td>
+                              <div dangerouslySetInnerHTML={{ __html: post.description }}></div>
+                            </td>
                           </tr>
                           <tr>
                             <th>7.</th>
