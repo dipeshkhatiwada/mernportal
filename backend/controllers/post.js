@@ -1,7 +1,7 @@
 const Post = require("../models/post");
-// const formidable = require("formidable");
-// const _ = require("lodash");
-// const fs = require("fs");
+const formidable = require("formidable");
+const _ = require("lodash");
+const fs = require("fs");
 
 exports.getPostById = (req, res, next, id) => {
     Post.findById(id)
@@ -19,22 +19,20 @@ exports.getPostById = (req, res, next, id) => {
 };
 
 exports.createPost = (req, res)=>{
-    // console.log(req.body);
-
-    // if (!req.files || Object.keys(req.files).length === 0) {
-    //     return res.status(400).send('Photo is required.');
-    // }
-    // // The name of the input field (i.e. "photo") is used to retrieve the uploaded file
-    // let photo = req.files.photo;
-    // // Use the mv() method to place the file somewhere on your server
-    // photo.mv('./uploads/'+photo.name, function(err) {
-    //     if (err){
-    //         return res.status(500).send(err);
-    //     }
-    // });
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send('Photo is required.');
+    }
+    // The name of the input field (i.e. "photo") is used to retrieve the uploaded file
+    let photo = req.files.photo;
+    // Use the mv() method to place the file somewhere on your server
+    photo.mv('./uploads/'+photo.name, function(err) {
+        if (err){
+            return res.status(500).send(err);
+        }
+    });
     Post.create({
         ...req.body,
-        // photo: `/uploads/${photo.name}`//this code is what I get in the database photo
+        photo: `/uploads/${photo.name}`//this code is what I get in the database photo
     }, (err, post) => {
         if (err) {
             return res.status(400).json(err);
@@ -158,32 +156,3 @@ exports.getAllUniqueCategories = (req, res) => {
         res.json(category);
     })
 }
-
-// MIDDLEWARE
-exports.updateStock = (req, res, next) => {
-    // map() helps in LOOPING
-    let myOperations = req.body.order.posts.map(prod => {
-        return {
-            updateOne: {
-                filter: {
-                    _id: prod._id
-                },
-                update: {
-                    $inc: {
-                        stock: -prod.count,
-                        sold: +prod.count
-                    }
-                }
-            }
-        }
-    })
-
-    Post.bulkWrite(myOperations, {}, (err, posts) => {
-        if (err) {
-            return res.status(400).json({
-                error: "Bulk operation failed"
-            })
-        }
-        next();
-    })
-};

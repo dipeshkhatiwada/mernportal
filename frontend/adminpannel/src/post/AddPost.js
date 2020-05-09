@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CKEditor from 'ckeditor4-react';
 import { isAuthenticated } from '../auth/helper';
 import Base from '../component/Base';
-import { createCategory, getCategories } from '../category/helper/adminapicall';
+import { getCategories } from '../category/helper/adminapicall';
 import { createPost } from './helper/adminapicall';
 import Loader from '../component/Loader';
 import Messages from '../component/Messages';
@@ -25,34 +25,32 @@ const AddPost = () => {
       formData:""
   });
   const {
-     name, slug, photo, rank, description, status, main,
-     categories, category, loading, error, success, getaRedirect,formData
+     name, slug, photo, rank,
+      description,status, main,
+     categories, category, loading, error, 
+     success, getaRedirect, formData
     } = values;
+    const preload= () => {
+      getCategories().then(data =>{
+          if(data.error){
+              setValues({...values, error:data.error});
+          }else{
+              setValues({...values, categories:data, formData: new FormData() });
+          }
+      })
+    }
+    useEffect(() => {
+      preload();
+    }, []);
   const handleChange = name => event => {
     const value = name === "photo" ? event.target.files[0] :event.target.value
-        formData.set(name,value);
-        setValues({...values,error:false, [name]:value});
+    formData.set(name,value);
+    setValues({...values,error:false, [name]:value});
   };
   const onEditorChange = ( evt ) => {
+    formData.set('description',evt.editor.getData());
     setValues( {...values, description: evt.editor.getData() } );
   }
-  // const handlefile =(e) =>{
-  //   // console.log(e.target.files[0]);
-  //   setValues({...values, photo:e.target.files[0]});
-  // }
-  const preload= () => {
-    getCategories().then(data =>{
-        if(data.error){
-            setValues({...values, error:data.error});
-        }else{
-            setValues({...values, categories:data, formData: new FormData() });
-        }
-    })
-  }
-  useEffect(() => {
-    preload();
-  }, []);
-
   const slugify = ()=>{
     var slug = name;
     slug = slug.toLowerCase();
@@ -64,9 +62,9 @@ const AddPost = () => {
     event.preventDefault();
     setValues({...values, error:"", categories:[], loading:true })
     // backend request call
-    createPost(user._id,token,values)
+    createPost(user._id,token,formData)
     .then(data=>{
-      console.log(data);
+      // console.log(data);
       if(data.error){
           setValues({...values, error: data.error})
       }else{
@@ -88,7 +86,6 @@ const AddPost = () => {
     <form  method="POST" className="needs-validation" noValidate encType="multipart/form-data">
        <div className="form-group">
         <label className="col-form-label col-12 ">Category</label>
-        {JSON.stringify(values)}
         <select
         onChange={handleChange("category")}
         className="form-control"

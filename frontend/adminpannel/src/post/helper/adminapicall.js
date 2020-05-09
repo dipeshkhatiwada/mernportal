@@ -6,10 +6,9 @@ export const createPost = (userId,token,post)=>{
         method:"POST",
         headers:{
             Accept: "application/json",
-            "Content-Type": "application/json",
             Authorization:`Bearer ${token}`
         },
-        body: JSON.stringify(post)
+        body:post
     })
     .then(response=>{
         return response.json()
