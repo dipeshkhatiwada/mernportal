@@ -1,26 +1,36 @@
 import React, { useState, useEffect } from 'react';
+import CKEditor from 'ckeditor4-react';
 import { isAuthenticated } from '../auth/helper';
 import Base from '../component/Base';
 import Loader from '../component/Loader';
 import Messages from '../component/Messages';
-import {  getCategory, updateCategory } from './helper/adminapicall';
-const UpdateCategory = ({match}) => {
+import {  getPost, updatePost } from './helper/adminapicall';
+const UpdatePost = ({match}) => {
   const {user,token} = isAuthenticated();
   const [values, setValues] = useState({
-      title: "",
-      slug: "",
-      rank: 1,
-      status: "true",
-      menu: "false",
-      loading:false,
-      error:"",
-      success:"",
-      getaRedirect:false,
+    name: "",
+    slug: "",
+    photo:"",
+    rank: 1,
+    description: "",
+    status: "true",
+    main: "false",
+    categories:[],
+    category:"",
+    loading:false,
+    error:"",
+    success:"",
+    getaRedirect:false,
+    formData:""
   });
-  const { title, slug, rank, status, menu, loading, error, success, getaRedirect} = values;
-  
-  const preload= categoryId => {
-    getCategory(categoryId).then(data =>{
+  const {
+    name, slug, photo, rank,
+     description,status, main,
+    categories, category, loading, error, 
+    success, getaRedirect, formData
+   } = values;
+  const preload= postId => {
+    getPost(postId).then(data =>{
         if(data.error){
             setValues({...values, error:data.error});
         }else{
@@ -36,17 +46,23 @@ const UpdateCategory = ({match}) => {
     })
   }
   useEffect(() => {
-    preload(match.params.categoryId);
+    preload(match.params.postId);
   }, []);
 
   const handleChange = name => event => {
-    setValues({...values,error:false, [name]:event.target.value});
+    const value = name === "photo" ? event.target.files[0] :event.target.value
+    formData.set(name,value);
+    setValues({...values,error:false, [name]:value});
   };
+  const onEditorChange = ( evt ) => {
+    formData.set('description',evt.editor.getData());
+    setValues( {...values, description: evt.editor.getData() } );
+  }
   const onSubmit = (event)=>{
     event.preventDefault();
     setValues({...values, error:"", loading:true })
     // backend request call
-    updateCategory(match.params.categoryId, user._id, token, {values})
+    updatePost(match.params.postId, user._id, token, {values})
     .then(data=>{
       if(data.error){
           setValues({...values, error: data.error})
@@ -54,18 +70,33 @@ const UpdateCategory = ({match}) => {
           setValues({
               ...values,
               loading:false,
-              success:"Category upaated successfully"
+              success:"Post upaated successfully"
           })
       }
     })
   }
-  const updateCategoryForm = ()=>(
-    <form  method="POST" className="needs-validation" noValidate>
+  const updatePostForm = ()=>(
+    <form  method="POST" className="needs-validation" noValidate encType="multipart/form-data">
+       <div className="form-group">
+        <label className="col-form-label col-12 ">Category</label>
+        <select
+        onChange={handleChange("category")}
+        className="form-control"
+        name="category"
+        >
+        <option >Select Category</option>
+        {categories && 
+        categories.map((cat, index) => (
+            <option key={index} value={cat._id}>{cat.title}</option>
+        ))
+        }
+        </select>
+    </div>
       <div className="form-group">
-        <label className="col-form-label col-12 ">Title</label>
-        <input type="text" onChange={handleChange("title")} value={title} className="form-control my-3" autoFocus required placeholder="Enter title" />
+        <label className="col-form-label col-12 ">Name</label>
+        <input type="text" onChange={handleChange("name")} value={name} className="form-control my-3" autoFocus required placeholder="Enter name" />
         <div className="invalid-feedback">
-          Please enter category title
+          Please enter category name
         </div>
       </div>
       <div className="form-group">
@@ -76,21 +107,36 @@ const UpdateCategory = ({match}) => {
         </div>
       </div>
       <div className="form-group">
+        <label className="col-form-label col-12 ">photo</label>
+        <input type="file" name="photo" accept="image" onChange={handleChange("photo")} className="form-control my-3" required placeholder="Enter photo" />
+        <div className="invalid-feedback">
+          Please enter category photo
+        </div>
+      </div>
+      <div className="form-group">
         <label className="col-form-label col-12 ">Rank</label>
         <input type="number" onChange={handleChange("rank")} value={rank} className="form-control my-3" required placeholder="Enter rank" />
         <div className="invalid-feedback">
           Please enter rank
         </div>
       </div>
+      <div className="form-group">
+        <label className="col-form-label col-12 ">description</label>
+        <CKEditor data={description} onChange={onEditorChange} />
+        {/* <textarea onChange={handleChange("description")} value={description} className="form-control my-3" required placeholder="Enter description" ></textarea> */}
+        <div className="invalid-feedback">
+          Please enter description
+        </div>
+      </div>
       
       <div className="form-group">
-        <label className="col-form-label col-12 ">Menu</label>
+        <label className="col-form-label col-12 ">Main</label>
         <div className="pretty p-icon p-smooth mx-4">
-          <input type="radio"  name="menu" onChange={handleChange("menu")} value="true" checked={menu === 'true'} />
+          <input type="radio"  name="main" onChange={handleChange("main")} value="true" checked={main === 'true'} />
           <div className="state p-success"> <i className="icon fa fa-check"></i> <label>Active</label> </div>
         </div>
         <div className="pretty p-icon p-smooth">
-          <input type="radio" name="menu" onChange={handleChange("menu")} value="false" checked={menu === 'false'}/>
+          <input type="radio" name="main" onChange={handleChange("main")} value="false" checked={main === 'false'}/>
           <div className="state p-danger-o"> <i className="icon fas fa-times"></i> <label>Deactive</label> </div>
         </div>
       </div>
@@ -119,11 +165,11 @@ const UpdateCategory = ({match}) => {
           <div className="col-12">
             <div className="card">
               <div className="card-header">
-                <h4>Add new Category</h4>
+                <h4>Add new Post</h4>
         
               </div>
               <div className="card-body">
-                {updateCategoryForm()}
+                {updatePostForm()}
               </div>
             </div>
           </div>
@@ -132,4 +178,4 @@ const UpdateCategory = ({match}) => {
       </Base>
   );
 }
-export default UpdateCategory;
+export default UpdatePost;
