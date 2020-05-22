@@ -5,6 +5,7 @@ import Base from '../component/Base';
 import Loader from '../component/Loader';
 import Messages from '../component/Messages';
 import {  getPost, updatePost } from './helper/adminapicall';
+import { getCategories } from '../category/helper/adminapicall';
 const UpdatePost = ({match}) => {
   const {user,token} = isAuthenticated();
   const [values, setValues] = useState({
@@ -34,16 +35,34 @@ const UpdatePost = ({match}) => {
         if(data.error){
             setValues({...values, error:data.error});
         }else{
+          preloadCategories();
+          setValues({
+              ...values,
+              name:data.name,
+              slug:data.slug,
+              rank:data.rank,
+              description:data.description,
+              status:data.status,
+              menu:data.menu+"",
+              category:data.category._id,
+              formData : new FormData()
+          });
+        }
+    })
+  }
+  const preloadCategories = ()=>{
+    getCategories().then(data =>{
+        // console.log(data);
+        if(data.error){
+            setValues({...values, error:data.error});
+        }else{
             setValues({
-                ...values,
-                title:data.title,
-                slug:data.slug,
-                rank:data.rank,
-                status:data.status+"",
-                menu:data.menu+"",
+                categories:data,
+                formData: new FormData() 
             });
         }
     })
+
   }
   useEffect(() => {
     preload(match.params.postId);
@@ -79,6 +98,7 @@ const UpdatePost = ({match}) => {
     <form  method="POST" className="needs-validation" noValidate encType="multipart/form-data">
        <div className="form-group">
         <label className="col-form-label col-12 ">Category</label>
+        {JSON.stringify(values)}
         <select
         onChange={handleChange("category")}
         className="form-control"
